@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -28,14 +29,19 @@ public class EmployeeService {
     }
 
     public List<employeeDto> getAllEmployee(){
-        List<entity> returnValue= employeeRepo.findAll();
-        System.out.println(returnValue);
-        List<employeeDto> dtoReturnVal= new ArrayList<>();
-        for(entity ent:returnValue){
-            //This is the one way to change the object type from entity to dto. Better if we use ModalMapper.
-            dtoReturnVal.add(new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
-        }
-        return dtoReturnVal;
+        List<entity> employees= employeeRepo.findAll();
+        System.out.println(employees);
+
+        // Traditional method
+//        List<employeeDto> dtoReturnVal= new ArrayList<>();
+//        for(entity ent:employees){
+//            //This is the one way to change the object type from entity to dto. Better if we use ModalMapper.
+//            dtoReturnVal.add(new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
+//        }
+//        return dtoReturnVal;
+        return employees.stream()
+                .map(employee-> modelMapper.map(employee, employeeDto.class))
+                .collect(Collectors.toList());
     }
 
 }
