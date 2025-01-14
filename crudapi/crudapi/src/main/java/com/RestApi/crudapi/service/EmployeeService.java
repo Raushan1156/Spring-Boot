@@ -1,13 +1,11 @@
 package com.RestApi.crudapi.service;
 
-import com.RestApi.crudapi.config.ModelMapperConfig;
-import com.RestApi.crudapi.dto.employeeDto;
-import com.RestApi.crudapi.entity.entity;
+import com.RestApi.crudapi.dto.EmployeeDto;
+import com.RestApi.crudapi.entity.EmployeeEntity;
 import com.RestApi.crudapi.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,15 +19,15 @@ public class EmployeeService {
         this.modelMapper=modelMapper;
     }
 
-    public employeeDto getEmployeeById(Long id){
-        entity ent= employeeRepo.findById(id).orElse(null);
-        return modelMapper.map(ent,employeeDto.class);
+    public EmployeeDto getEmployeeById(Long id){
+        EmployeeEntity ent= employeeRepo.findById(id).orElse(null);
+        return modelMapper.map(ent, EmployeeDto.class);
 //      return new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
 
     }
 
-    public List<employeeDto> getAllEmployee(){
-        List<entity> employees= employeeRepo.findAll();
+    public List<EmployeeDto> getAllEmployee(){
+        List<EmployeeEntity> employees= employeeRepo.findAll();
         System.out.println(employees);
 
         // Traditional method
@@ -40,8 +38,24 @@ public class EmployeeService {
 //        }
 //        return dtoReturnVal;
         return employees.stream()
-                .map(employee-> modelMapper.map(employee, employeeDto.class))
+                .map(employee-> modelMapper.map(employee, EmployeeDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public EmployeeDto createNewEmployee(EmployeeDto employeeDto){
+        EmployeeEntity toSaveEntity=modelMapper.map(employeeDto,EmployeeEntity.class);
+        EmployeeEntity savedEntity=employeeRepo.save(toSaveEntity);
+
+        return modelMapper.map(savedEntity,EmployeeDto.class);
+    }
+
+    public EmployeeDto updateEmployeeById(Long id,EmployeeDto employeeDto){
+        EmployeeEntity toUpdateEntity= modelMapper.map(employeeDto,EmployeeEntity.class);
+        // id is present: it will update the data of that id.
+        // id is not present: it will create a new id and will add the responsebody.
+        toUpdateEntity.setId(id);
+        EmployeeEntity savedEntity= employeeRepo.save(toUpdateEntity);
+        return  modelMapper.map(savedEntity,EmployeeDto.class);
     }
 
 }

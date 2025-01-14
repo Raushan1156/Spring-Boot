@@ -1,0 +1,17 @@
+1) com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of com.RestApi.crudapi.dto.EmployeeDto (no Creators, like default constructor, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
+
+Ans: I was missing below line in prop file.
+spring.jpa.hibernate.ddl-auto=update
+
+2)Sequence "EMPLOYEE_SEQ" not found; SQL statement:
+select next value for employee_seq [90036-232]
+2025-01-14T09:41:25.415+05:30 ERROR 9808 --- [Rest Api] [nio-8080-exec-4] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.dao.InvalidDataAccessResourceUsageException: could not prepare statement [Sequence "EMPLOYEE_SEQ" not found; SQL statement:
+select next value for employee_seq [90036-232]] [select next value for employee_seq]; SQL [select next value for employee_seq]] with root cause
+
+Ans: I was missing the default constructer in my dto class.
+
+
+3) org.hibernate.StaleObjectStateException: Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect): [com.RestApi.crudapi.entity.EmployeeEntity#2]
+
+This occured when I tried to update the row which doesn't exist.
+Explore StaleObjectStateException

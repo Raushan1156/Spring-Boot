@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class entity {
+public class EmployeeEntity {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)

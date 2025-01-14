@@ -1,10 +1,7 @@
 package com.RestApi.crudapi.controller;
 
-import com.RestApi.crudapi.dto.employeeDto;
-import com.RestApi.crudapi.entity.entity;
-import com.RestApi.crudapi.repository.EmployeeRepo;
+import com.RestApi.crudapi.dto.EmployeeDto;
 import com.RestApi.crudapi.service.EmployeeService;
-import jakarta.persistence.Entity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,8 +18,8 @@ public class controller {
     }
     ArrayList<String> employee=new ArrayList<>(Arrays.asList("Raushan","Ramesh", "Rohan"));
 
-    @GetMapping("/")
-    public List<employeeDto> getAllEmployee(){
+    @GetMapping()
+    public List<EmployeeDto> getAllEmployee(){
 //        List<entity> returnValue= employeeService.findAll();
 //        System.out.println(returnValue);
 //        List<employeeDto> dtoReturnVal= new ArrayList<>();
@@ -41,15 +38,18 @@ public class controller {
     }
 
     @PostMapping()
-    public String addEmployee(@RequestParam String name){
-        employee.add(name);
-    return " added name: "+name;
+    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDto){
+//        employee.add(name);
+//    return " added name: "+name;
+        return employeeService.createNewEmployee(employeeDto);
     }
 
-    @PutMapping("/update/{id}/{name}")
-    public ArrayList<String> updateEmployee(@PathVariable Long id, @PathVariable String name){
-        employee.set(id.intValue()-1,name);
-        return employee;
+    @PutMapping("/update/{employeeID}")
+    public EmployeeDto updateEmployee(@PathVariable (name = "employeeID") Long id, @RequestBody EmployeeDto employeeDto){
+//        employee.set(id.intValue()-1,name);
+//        return employee;
+
+        return employeeService.updateEmployeeById(id,employeeDto);
     }
 
     @DeleteMapping("/delete")

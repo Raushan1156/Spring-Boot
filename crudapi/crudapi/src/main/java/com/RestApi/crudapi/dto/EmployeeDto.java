@@ -1,11 +1,11 @@
 package com.RestApi.crudapi.dto;
 
-import com.RestApi.crudapi.entity.entity;
+import com.RestApi.crudapi.entity.EmployeeEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class employeeDto {
+public class EmployeeDto {
     private Long id;
     private String name;
     private String email;
@@ -13,10 +13,10 @@ public class employeeDto {
     private LocalDate dateOfJoining;
     private Boolean isActive;
 
-    public employeeDto(List<entity> all){
+    public EmployeeDto(){
     }
 
-    public employeeDto(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
+    public EmployeeDto(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.email = email;
