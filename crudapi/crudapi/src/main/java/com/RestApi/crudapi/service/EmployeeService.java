@@ -4,9 +4,12 @@ import com.RestApi.crudapi.dto.EmployeeDto;
 import com.RestApi.crudapi.entity.EmployeeEntity;
 import com.RestApi.crudapi.repository.EmployeeRepo;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +23,8 @@ public class EmployeeService {
     }
 
     public EmployeeDto getEmployeeById(Long id){
-        EmployeeEntity ent= employeeRepo.findById(id).orElse(null);
-        return modelMapper.map(ent, EmployeeDto.class);
+        EmployeeEntity employeeEntity= employeeRepo.findById(id).orElse(null);
+        return modelMapper.map(employeeEntity, EmployeeDto.class);
 //      return new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
 
     }
@@ -49,7 +52,7 @@ public class EmployeeService {
         return modelMapper.map(savedEntity,EmployeeDto.class);
     }
 
-    public EmployeeDto updateEmployeeById(Long id,EmployeeDto employeeDto){
+    public EmployeeDto updateEmployeeById(Long id, EmployeeDto employeeDto){
         EmployeeEntity toUpdateEntity= modelMapper.map(employeeDto,EmployeeEntity.class);
         // id is present: it will update the data of that id.
         // id is not present: it will create a new id and will add the responsebody.
@@ -58,4 +61,21 @@ public class EmployeeService {
         return  modelMapper.map(savedEntity,EmployeeDto.class);
     }
 
+        public EmployeeDto updatePatchValue(Long id, Map<String,Object> updates){
+            EmployeeEntity employeeEntity=employeeRepo.findById(id).get();
+            updates.forEach((field,value)-> {
+                Field requiredField=ReflectionUtils.findRequiredField(EmployeeEntity.class,field);
+                requiredField.setAccessible(true);
+                ReflectionUtils.setField(requiredField,employeeEntity,value);
+            });
+            return modelMapper.map(employeeRepo.save(employeeEntity),EmployeeDto.class);
+        }
+
+    public boolean deleteEmployeeById(Long employeeId) {
+        boolean returnVal=employeeRepo.existsById(employeeId);
+        if(!returnVal)
+            return false;
+        employeeRepo.deleteById(employeeId);
+        return true;
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
@@ -30,11 +31,12 @@ public class controller {
     }
 
     @GetMapping("/{id}")
-    public String getEmployeeById(@PathVariable Long id) {
-        if (id <= employee.size()-1)
-            return employee.get(id.intValue()-1);
-        else
-            return "Your " + id + " doesn't exist";
+    public EmployeeDto getEmployeeById(@PathVariable Long id) {
+//        if (id <= employee.size()-1)
+//            return employee.get(id.intValue()-1);
+//        else
+//            return "Your " + id + " doesn't exist";
+        return employeeService.getEmployeeById(id);
     }
 
     @PostMapping()
@@ -44,7 +46,7 @@ public class controller {
         return employeeService.createNewEmployee(employeeDto);
     }
 
-    @PutMapping("/update/{employeeID}")
+    @PutMapping("/{employeeID}")
     public EmployeeDto updateEmployee(@PathVariable (name = "employeeID") Long id, @RequestBody EmployeeDto employeeDto){
 //        employee.set(id.intValue()-1,name);
 //        return employee;
@@ -52,17 +54,22 @@ public class controller {
         return employeeService.updateEmployeeById(id,employeeDto);
     }
 
-    @DeleteMapping("/delete")
-    public ArrayList<String> deleteEmployee() {
-        if (!employee.isEmpty()){
-            employee.removeLast();
-        return employee;
-        }
-        else{
-            employee.add("employe is empty");
-            return employee;
-        }
+    @PatchMapping("/{empId}")
+    public EmployeeDto updatePatchValue(@PathVariable (name="empId") Long id, @RequestBody Map<String,Object> employeeDto){
+        return employeeService.updatePatchValue(id,employeeDto);
+    }
 
+    @DeleteMapping("/{employeeId}")
+    public boolean deleteEmployeeById(@PathVariable Long employeeId) {
+//        if (!employee.isEmpty()){
+//            employee.removeLast();
+//        return employee;
+//        }
+//        else{
+//            employee.add("employe is empty");
+//            return employee;
+//        }
+        return employeeService.deleteEmployeeById(employeeId);
     }
 
 }

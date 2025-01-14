@@ -1,0 +1,17 @@
+@JsonProperty("isActive")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Configuration
+@Bean
+@SpringBootApplication
+@Controller vd @RestController
+@Service
+@Repository
+@Autowired
+@Id
+@Entity
+@Table
+@Column
+@GeneratedValue (strategy = GenerationType.AUTO)

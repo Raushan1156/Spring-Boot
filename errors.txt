@@ -15,3 +15,7 @@ Ans: I was missing the default constructer in my dto class.
 
 This occured when I tried to update the row which doesn't exist.
 Explore StaleObjectStateException
+
+4) java.lang.IllegalArgumentException: Can not set java.lang.String field com.RestApi.crudapi.dto.EmployeeDto.name to com.RestApi.crudapi.entity.EmployeeEntity
+
+We can't store the dto to entity directly.
