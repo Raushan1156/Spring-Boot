@@ -1,2 +1,25 @@
 update commit message:
 $git commit --amend -m "new message"
+
+get latest full commit id:
+$git log -1 --format="%H"
+$git rev-parse HEAD
+
+
+get latest short-hand commit id: (will give starting 7digit)
+$git log -1 --format="%h"
+or $git rev-parse --short HEAD
+
+For all details of latest commit:
+$git log
+
+Merge two branches:
+$git merge <branch to merge>
+
+Abort merge:
+$git merge --abort
+or $git reset --hard HEAD
+
+Reset commit forcefully:
+$git reset --hard <commit-id>
+
