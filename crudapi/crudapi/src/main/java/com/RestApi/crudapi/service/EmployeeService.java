@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,9 +23,10 @@ public class EmployeeService {
         this.modelMapper=modelMapper;
     }
 
-    public EmployeeDto getEmployeeById(Long id){
-        EmployeeEntity employeeEntity= employeeRepo.findById(id).orElse(null);
-        return modelMapper.map(employeeEntity, EmployeeDto.class);
+    public Optional<EmployeeDto> getEmployeeById(Long id){
+        Optional<EmployeeEntity> employeeEntity= Optional.ofNullable(employeeRepo.findById(id).orElse(null));
+
+        return employeeEntity.map(employeeEntity1 -> modelMapper.map(employeeEntity1,EmployeeDto.class) );
 //      return new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
 
     }

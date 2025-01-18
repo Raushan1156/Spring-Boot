@@ -2,12 +2,11 @@ package com.RestApi.crudapi.controller;
 
 import com.RestApi.crudapi.dto.EmployeeDto;
 import com.RestApi.crudapi.service.EmployeeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/employee")
@@ -20,47 +19,59 @@ public class controller {
     ArrayList<String> employee=new ArrayList<>(Arrays.asList("Raushan","Ramesh", "Rohan"));
 
     @GetMapping()
-    public List<EmployeeDto> getAllEmployee(){
+    public ResponseEntity<List<EmployeeDto>> getAllEmployee(){
 //        List<entity> returnValue= employeeService.findAll();
 //        System.out.println(returnValue);
 //        List<employeeDto> dtoReturnVal= new ArrayList<>();
 //        for(entity ent:returnValue){
 //            dtoReturnVal.add(new employeeDto(ent.getId(),ent.getName(),ent.getEmail(),ent.getAge(),ent.getDateOfJoining(),ent.getIsActive()));
 //        }
-    return employeeService.getAllEmployee();
+        List<EmployeeDto> getAllEmployeeDetails = employeeService.getAllEmployee();
+        if (getAllEmployeeDetails==null)
+            return  ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.ok(getAllEmployeeDetails);
     }
 
     @GetMapping("/{id}")
-    public EmployeeDto getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
 //        if (id <= employee.size()-1)
 //            return employee.get(id.intValue()-1);
 //        else
 //            return "Your " + id + " doesn't exist";
-        return employeeService.getEmployeeById(id);
+        Optional<EmployeeDto> employeeDtoOptional= employeeService.getEmployeeById(id);
+        return employeeDtoOptional
+                .map(employeeDtoOptional1-> ResponseEntity.ok(employeeDtoOptional1))
+                //.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with the given ID was not found."));
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto employeeDto){
 //        employee.add(name);
 //    return " added name: "+name;
-        return employeeService.createNewEmployee(employeeDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.createNewEmployee(employeeDto));
     }
 
     @PutMapping("/{employeeID}")
-    public EmployeeDto updateEmployee(@PathVariable (name = "employeeID") Long id, @RequestBody EmployeeDto employeeDto){
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable (name = "employeeID") Long id, @RequestBody EmployeeDto employeeDto){
 //        employee.set(id.intValue()-1,name);
 //        return employee;
 
-        return employeeService.updateEmployeeById(id,employeeDto);
+        return ResponseEntity.ok(employeeService.updateEmployeeById(id,employeeDto));
     }
 
     @PatchMapping("/{empId}")
-    public EmployeeDto updatePatchValue(@PathVariable (name="empId") Long id, @RequestBody Map<String,Object> employeeDto){
-        return employeeService.updatePatchValue(id,employeeDto);
+    public ResponseEntity<EmployeeDto> updatePatchValue(@PathVariable (name="empId") Long id, @RequestBody Map<String,Object> employeeDto){
+        EmployeeDto patchedData=employeeService.updatePatchValue(id,employeeDto);
+        if (patchedData!=null)
+            return ResponseEntity.ok(patchedData);
+        else
+            return  ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{employeeId}")
-    public boolean deleteEmployeeById(@PathVariable Long employeeId) {
+    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable Long employeeId) {
 //        if (!employee.isEmpty()){
 //            employee.removeLast();
 //        return employee;
@@ -69,7 +80,11 @@ public class controller {
 //            employee.add("employe is empty");
 //            return employee;
 //        }
-        return employeeService.deleteEmployeeById(employeeId);
+        boolean deletedEmployee= employeeService.deleteEmployeeById(employeeId);
+        if (deletedEmployee)
+            return ResponseEntity.ok(deletedEmployee);
+        else
+            return ResponseEntity.notFound().build();
     }
 
 }
