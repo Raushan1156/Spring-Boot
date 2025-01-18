@@ -30,5 +30,12 @@ public class StreamApi{
                 .filter(i->i%2!=0)
                 .sum();
         System.out.println(total);
+//----------------------------------------------------Static vs Instance method------------------------------------
+        // Instance method always involves the objects
+        String str="Instance method is called.";
+        System.out.println(str.toUpperCase());
+
+        //Static method never involve the objects
+        System.out.println(Math.max(12,45));
     }
 }
