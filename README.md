@@ -9,5 +9,5 @@ Stream API (java.util.stream.Stream) and other traditional ways to achieve the s
 Lambda function<br>
 Functional Interface and Dependency <br>
 stream() method (java.util.stream.Collectors) <br>
-Parallel(o/p order is not fixed) and Sequential(o/p order is fixed) stream()<br>
+Parallel(<b>o/p order is not fixed</b>) and Sequential(<b>o/p order is fixed</b>) stream()<br>
 
