@@ -10,4 +10,4 @@ Lambda function<br>
 Functional Interface and Dependency <br>
 stream() method (java.util.stream.Collectors) <br>
 Parallel(<b>o/p order is not fixed</b>) and Sequential(<b>o/p order is fixed</b>) stream()<br>
-
+ResponseEntity<br>
