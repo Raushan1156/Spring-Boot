@@ -23,3 +23,7 @@ or $git reset --hard HEAD
 Reset commit forcefully:
 $git reset --hard <commit-id>
 
+git add .  # Oops! I didn’t want to stage everything.
+git reset            # Unstages everything
+git reset file1.java # Unstage only this file
+
